@@ -1,0 +1,68 @@
+//Minimum Room Allocation for n meeting
+#include<bits/stdc++.h>
+using namespace std;
+int main() { 
+    ios_base::sync_with_stdio(false), cin.tie(NULL);
+    #ifndef ONLINE_JUDGE
+    freopen("input.txt", "r", stdin); 
+    freopen("output.txt", "w", stdout);
+    #endif
+
+    int n; cin>> n;
+    vector<pair<int,int> > v;
+    for(int i = 0; i<n; i++){
+        // string s1 , s2, str;
+        // cin >> s1 >> s2;
+
+        // vector<double> ST, EN;
+        // stringstream ss(s1);
+        // while(getline(ss,str,':'))
+        //     ST.push_back(stoi(str));
+
+        // stringstream sss(s2);
+        // while(getline(sss,str,':'))
+        //     EN.push_back(stoi(str));
+
+        // double starting_time = ST[0]*60 + ST[1];
+        // double ending_time = EN[0]*60 + EN[1];
+        double starting_time, ending_time;
+        cin>> starting_time >> ending_time;
+        v.push_back({starting_time,1}); //Number of room increases by 1 at starting moment
+        v.push_back({ending_time,-1});  //Number of room decreases by 1 at starting moment
+    }
+    sort(begin(v), end(v)); //According to first the second.
+
+    int cnt = 0, mx = 0;
+    for(int i = 0; i<n; i++)
+    {
+        cnt += v[i].second;
+        mx = max(cnt, mx);
+    }
+    cout<<mx<<"\n";
+}
+
+/*
+Input
+6
+5 12
+9 18
+11 16
+14 21
+15 23
+12 15
+
+Output
+4
+*/
+
+/*
+Input
+4
+10:00 12:00
+11:00 13:10
+12:50 14:20
+13:50 14:50
+
+Output
+2
+*/

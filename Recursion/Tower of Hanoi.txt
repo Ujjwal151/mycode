@@ -1,0 +1,46 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define o3(a,b,c) cout << a << ' ' << b << ' ' << c << '\n';
+int cnt = 0, before, cntTill;
+vector<int> v = {3,0,0};
+
+void towerOfHanoi(int n, char from, char to, char temp)
+{   
+    char new_from, new_to, new_temp;
+    
+    new_from = from, new_to = temp, new_temp = to;
+	if(n > 1){
+	    towerOfHanoi(n - 1, new_from, new_to, new_temp);
+	}
+
+	++cnt;
+	if(cnt > cntTill) return;
+	
+	v[from- 'A']--; v[to - 'A']++;
+    cout<<"Move "<<n<<" from "<<from<<" to "<<to<<"\n";
+	o3(v[0],v[1],v[2]);
+
+    new_from = temp, new_to = to, new_temp = from;
+	if(n > 1){
+		towerOfHanoi(n - 1, new_from, new_to, new_temp);
+	}
+}
+
+// Driver code
+int main()
+{
+    ios_base::sync_with_stdio(false), cin.tie(NULL);
+    #ifndef ONLINE_JUDGE
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
+    #endif
+
+	int N = 3;
+	before = 3;
+	cntTill = pow(2,N) - 1 - before;
+
+	// A, B and C are names of rods
+	towerOfHanoi(N, 'A', 'C', 'B');
+
+	return 0;
+}

@@ -1,0 +1,33 @@
+--------------------Binary Exp (Recursive)----------------------------
+
+long long binaryExponentialRecursive(int a,int b){
+	if(b == ) return 1;
+	long long res = binaryExponentialRecursive(a, b/2);
+	res *= res;
+	if(b&1) return a*res;
+	else return res;
+}
+
+---------------- Or,Recursive (with1LL) -------------------------------
+
+long long binaryExponentialRecursive(int a,int b){
+	if(b == 0) return 1;
+	int res = binaryExponentialRecursive(a, b/2);
+	if(b&1) return 1LL*a*res*res;
+	else return 1LL*res*res;
+}
+
+
+--------------------Binary Exp (Iterative)----------------------------
+
+long long binaryExponentialIterative(long long a,long long b){
+	long long ans = 1;
+	while(b){
+		if(b&1){
+			ans *= a;
+		}
+		a *= a;
+		b >>= 1;
+	}
+	return ans;
+}

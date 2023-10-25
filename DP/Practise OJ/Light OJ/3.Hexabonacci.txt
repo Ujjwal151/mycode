@@ -1,0 +1,16 @@
+//https://lightoj.com/problem/hex-a-bonacci
+#include<bits/stdc++.h>
+int main()
+{
+   freopen("input.txt", "r", stdin); freopen("output.txt", "w", stdout);
+    int a,b,c,d,e,f,t,n;
+    scanf("%d",&t);
+    for (int cs = 1; cs <= t; cs++) {
+        int v[10009];
+        scanf("%d %d %d %d %d %d %d",&v[0],&v[1],&v[2],&v[3],&v[4],&v[5],&n);
+        for (int i =6; i <= n; ++i) {
+            v[i] = (1LL*v[i-1]+v[i-2]+v[i-3]+v[i-4]+v[i-5]+v[i-6])%10000007;
+        }
+        printf("Case %d: %d\n",cs,v[n]%10000007);
+    }
+}

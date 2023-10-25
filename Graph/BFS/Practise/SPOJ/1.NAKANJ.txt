@@ -1,0 +1,85 @@
+//https://www.spoj.com/problems/NAKANJ/
+#include<bits/stdc++.h>
+using namespace std;
+const int INF = 1e9+1; 
+const int N = 8;
+vector<int>g[N];
+
+vector<pair<int,int> > movements = {
+    {1,2},{1,-2},{-1,2},{-1,-2}, {2,1},{-2,1},{2,-1},{-2,-1}
+};
+
+bool isValid(int x, int y){
+    return x>=0 && x<=7 && y>=0 && y<=7;
+}
+
+int bfs(pair<int,int> src, pair<int,int> des)
+{
+	queue<pair<int,int> > q;
+	int visited[8][8] = {0};
+    int level[8][8];
+    for(int i = 0; i<8; i++)
+        for(int j = 0; j<8; j++)
+            level[i][j] = INF;
+
+    visited[src.first][src.second] = 1;
+    level[src.first][src.second] = 0;
+    
+	q.push(src);
+
+	while(!q.empty())
+	{
+		pair<int,int> cur_v = q.front();
+		q.pop();
+        int x = cur_v.first, y = cur_v.second;
+
+        for(auto move : movements)
+        {
+            int childx = x + move.first;
+            int childy = y + move.second; 
+
+            if(isValid(childx, childy)) 
+            {
+                if(!visited[childx][childy])
+                {
+                    q.push({childx, childy});
+                    visited[childx][childy] = 1;
+                    level[childx][childy] = level[x][y] + 1;
+                }
+                    
+            }
+        }
+
+        if(level[des.first][des.second] != INF)
+            break;
+	}
+
+    return level[des.first][des.second];
+}
+
+int main() 
+{ 
+	freopen("input.txt", "r", stdin); freopen("output.txt", "w", stdout);
+	int t; cin>>t;
+	string s1, s2;
+	while(t--)
+	{
+		cin>>s1>>s2;
+		pair<int,int> src = {s1[0] - 'a', s1[1] - '1' };
+		pair<int,int> des = {s2[0] - 'a', s2[1] - '1'};
+        cout<<bfs(src,des)<<"\n";
+	}
+}
+
+/*
+Input:
+3
+a1 h8
+a1 c2
+h8 c3
+
+Output:
+6
+1
+4
+*/

@@ -1,0 +1,79 @@
+//All Prime Factor's with their power.
+#include<bits/stdc++.h>
+using namespace std;
+using ll = long long;
+void init(){ 
+    #ifndef ONLINE_JUDGE 
+    freopen("input.txt", "r", stdin); 
+    freopen("output.txt", "w", stdout); 
+    #endif
+    #define nl "\n"
+    #define o2(a, b) cout << a << " " << b << "\n";
+    
+    #define inVec(v) for(auto &x: v) cin >> x;
+    #define outVec(v) for(auto &x: v) cout<< x <<" "; cout<<"\n";
+    #define in2dVec(v) int vsize = v.size(); for(int i = 0; i<vsize; i++){int v0size = v[0].size(); for(int j = 0; j < v0size; j++){ cin >> v[i][j];}}
+    #define out2dVec(v){for(auto &x : v){ for(auto &y: x){ cout<<y<<" ";} cout<<"\n";}}
+}
+
+//Complexity O(sqrt(number))
+void primeFactorsCount(ll number)
+{
+    map<ll,ll> mp;
+
+    if(number%2 == 0){
+        while(number%2 == 0)
+            mp[2]++, number >>= 1;
+    }
+   
+    ll limit = sqrt(number)+1, i = 3;
+    while(i<limit){
+        if(number%i == 0){
+            while(number%i == 0)
+                mp[i]++, number /= i;
+        }
+        i+=2;
+    }
+
+    if(number>2) mp[number]++;
+
+    for(auto pr : mp){
+        cout << pr.first << " ^ " << pr.second<<"\n";
+    }
+}
+
+void primeFactorsCount2(ll number)
+{
+    int cnt = 0;
+    if(number%2 == 0){
+        while(number%2 == 0){
+            cnt++;
+            number >>= 1;
+        }
+        cout<<2<<" ^ "<<cnt<<'\n';
+    }
+
+    ll limit = sqrt(number)+1, i = 3;
+    while(i<limit){
+        if(number%i == 0){
+            cnt = 0;
+            while(number%i == 0)
+                cnt++, number /= i;
+            cout<<i<<" ^ "<<cnt<<'\n';
+        }
+        i+=2;
+    }
+
+    if(number>2) { //For prime number 
+        cout<<number<<" ^ "<<1<<'\n';
+    }
+}
+
+int main(){ init();
+        // cout<<"Case "<<i<<": ";
+    ios_base::sync_with_stdio(0), cin.tie(0);
+    primeFactorsCount(100);
+    cout<<"\n";
+    primeFactorsCount2(100);
+    
+}

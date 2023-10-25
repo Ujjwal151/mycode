@@ -1,0 +1,38 @@
+// https://leetcode.com/problems/house-robber-ii
+//House Robber II
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+ll dp[5003];//5e3+3
+
+ll maxSumOfNonAdjElem(vector<int>& v,int n, int index)
+{
+    //Base case
+    if(index >= n ) return 0; 
+    //Direct return from dp
+    if(dp[index] != -1) return dp[index];
+    //Calcultion
+    ll included = v[index] + maxSumOfNonAdjElem(v, n, index + 2);
+    ll excluded = maxSumOfNonAdjElem(v, n, index + 1);
+    //Memoization and return
+    return dp[index] =  max(included,excluded);
+}
+
+ll rob(vector<int>& nums) {
+    int n = nums.size();
+    if(n == 1) return nums[0];
+    memset(dp,-1,sizeof(dp));
+    ll solution1 = maxSumOfNonAdjElem(nums,n-1,0);
+    memset(dp,-1,sizeof(dp));
+    ll solution2 = maxSumOfNonAdjElem(nums,n,1);
+    // cout<<solution1<<"\n";
+    return max(solution1,solution2);
+}
+
+int main()
+{ 
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
+    vector<int> v {5,3,1,4};
+    cout<<rob(v);
+}

@@ -1,0 +1,105 @@
+//Bipertite or two color check using DFS [Undirected Only]
+//NB:Any "odd cycle" creates "Not Bipartiteness". 
+#include <bits/stdc++.h>
+using namespace std;
+
+const int N = 1e5;
+vector<int> adj[N];
+vector<bool> vis(N);
+vector<bool> color(N);
+
+bool dfs(int u, bool c, int parent)
+{
+    vis[u] = 1;
+    color[u] = c;
+
+    for(auto v: adj[u]){
+        if(v == parent) continue;//Avoid the immediate parent
+        cout<<u<<" "<<v<<" "<<c<<"\n";
+        if(!vis[v]) {
+            // cout<<u<<" "<<v<<" "<<c<<"\n";
+            //If any dfs give false it immediately return false
+            if(!dfs(v, !c, u)) return false;
+        }
+        //Adcacent nodes of same color means not bipartite
+        else if(color[v] == c){
+            return false;
+        }
+    }
+    return true;
+}
+
+bool is_bipertite(int n){
+    for(int i = 1; i<=n; i++){
+        if(!vis[i]){
+            if(!dfs(i,1,-1)) return false;
+        }   
+    }
+    return true;
+}
+
+int main() 
+{
+	freopen("input.txt", "r", stdin); 
+    freopen("output.txt", "w", stdout);
+
+	int n, e; cin>>n>>e;
+
+    for(int i = 0; i<e; i++){
+        int u,v; 
+        cin >> u >> v;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+
+    if(is_bipertite(n)) cout<<"Bipertite\n";
+    else cout<<"Not bypertite\n";
+}
+
+/*
+3
+3
+1 2
+2 3
+3 1
+
+Output
+1 2 1
+2 3 0
+3 1 1
+Not bypertite
+*/
+
+/*
+input
+7 
+4
+1 2
+6 4
+4 5
+7 3
+
+Output
+1 2 1
+3 7 1
+4 6 1
+4 5 1
+Bipertite
+*/
+
+/*
+Input
+6
+8
+1 2
+2 3
+3 4
+4 5
+5 6
+6 1
+5 2
+1 4
+
+Output
+Bipertite
+*/

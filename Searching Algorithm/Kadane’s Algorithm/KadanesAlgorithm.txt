@@ -1,0 +1,26 @@
+//Kadenes Algorithm
+#include<bits/stdc++.h>
+using namespace std;
+#define ll long long
+#define int long long
+
+ll maxSubArray(vector<ll>&v){
+    ll max = INT64_MIN, temp = 0;
+    for(ll i = 0; i<v.size(); i++){
+        temp += v[i];
+        if(temp > max) max = temp;
+        if(temp < 0) temp = 0;
+    }
+    return max;
+}
+
+int32_t main() 
+{   
+    ios_base::sync_with_stdio(false); cin.tie(0);
+    #ifndef ONLINE_JUDGE
+    freopen("input.txt", "r", stdin); freopen("output.txt", "w", stdout);
+    #endif
+    
+    vector<int> v {-1, 3, -2, 5, 3, -5, 2, 2};
+    cout<<maxSubArray(v);
+}

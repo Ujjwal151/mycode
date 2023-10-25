@@ -1,0 +1,44 @@
+//spoj Finding kth prime number
+
+#include <bits/stdc++.h>
+using namespace std;
+#define maxN 90000000
+//Since 5000000th prime number is 86028121
+
+bool TF[maxN+1];
+vector<int> v;
+
+void sieve(){
+
+    TF[0] = TF[1] = true;
+
+    for(int i = 2; i*i<=maxN; i++){
+        if(!TF[i]){
+            for(int j = i*i; j<=maxN; j+=i){
+                TF[j] = true;
+            }
+        }
+    }
+
+    for(int i = 2; i<=maxN; i++){
+        if(!TF[i]){
+            v.push_back(i);
+        }
+    }
+
+
+}
+
+int main(){ ios::sync_with_stdio(false),cin.tie(0),cout.tie(0);
+
+    int q,n;
+    cin>>q;
+    sieve();
+    while(q--){
+        cin>>n;
+        cout<<v[n-1]<<endl;
+
+    }
+
+  return 0;
+}

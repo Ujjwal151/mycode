@@ -1,0 +1,74 @@
+//DFS : CF A. Transformation: from A to B
+//https://codeforces.com/problemset/problem/727/A
+#include <bits/stdc++.h>
+using namespace std;
+inline void init()
+{
+	ios_base::sync_with_stdio(false); cin.tie(0);
+	#ifndef ONLINE_JUDGE
+	freopen("input.txt", "r", stdin); 
+	freopen("output.txt", "w", stdout);
+	#endif  
+}
+#define int long long
+#define ll long long
+#define o2(a,b) cout << a << ' ' << b << '\n';
+#define o3(a,b,c) cout << a << ' ' << b << ' ' << c << '\n';
+#define out(v) for(auto &x : v) cout << x << ' '; cout<<'\n';
+
+map<int,int> parent;
+vector<int> ans;
+void print_parent(int b, int cnt)
+{
+	while(parent[b] != -1LL){
+		ans.push_back(b);
+        b = parent[b];
+	}
+    ans.push_back(b);
+	cout<<ans.size()<<"\n";
+    for(int i = ans.size() -1; i>=0; i--){
+        cout<<ans[i]<<" ";
+    } cout<<"\n";
+}
+
+bool dfs(int a, int b, int par)
+{
+    if(a > b) return false;
+    parent[a] = par; 
+    if(a==b) return true;
+    if(dfs(10*a + 1, b, a)) return true;
+    if(dfs(2*a,b,a)) return true;
+    return false;
+}
+
+int32_t main() 
+{init();
+	int A,B; cin >> A >> B;
+    int mod = B%10;
+    if(mod!=1LL && mod!=2LL && mod!=4LL && mod!=6LL && mod!=8LL){
+        cout<<"NO\n";
+        return 0;
+    }
+    if(dfs(A,B,-1)){
+        cout<<"YES\n";
+		print_parent(B, 1);
+    }
+	else{
+        cout<<"NO\n";
+	}
+    return 0;
+}
+/*
+Input
+100 40021
+
+Output
+YES
+5
+100 200 2001 4002 40021 
+
+Input
+4 42
+Output
+NO
+*/

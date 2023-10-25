@@ -1,0 +1,68 @@
+//https://leetcode.com/problems/house-robber
+//House Robber
+#include <bits/stdc++.h>
+using namespace std;
+
+int dp[105];
+int maxSumOfNonAdjElem(vector<int>& v,int n, int index)
+{
+    //Base case
+    if(index >= n ) return 0; 
+    //Direct return from dp
+    if(dp[index] != -1) return dp[index];
+    //Calcultion
+    int included = v[index] + maxSumOfNonAdjElem(v, n, index + 2);
+    int excluded = maxSumOfNonAdjElem(v, n, index + 1);
+    //Memoization and return
+    return dp[index] =  max(included,excluded);
+}
+
+
+int tabulation_maxSumOfNonAdjElem(vector<int>& nums){
+    int n = nums.size();
+    //DP Declaration
+    vector<int> dp(n+1, 0);
+
+    //Base Case [DP initialization]
+    dp[0] = nums[0];
+    if(n > 1) dp[1] = max(nums[0], nums[1]);
+    
+    //Bottom-Up memoization
+    for(int i = 2; i<n; i++){
+        dp[i] = max(nums[i] + dp[i-2], dp[i-1]);
+    }
+
+    return dp[n-1];
+}
+
+int SpOpt_maxSumOfNonAdjElem(vector<int>& nums){
+    int n = nums.size();
+    //Base Case [DP initialization]
+    int prev2 = 0, prev1 = nums[0];
+    
+    //Bottom-Up memoization
+    for(int i = 1; i<n; i++){
+        int cur = max(nums[i] + prev2, prev1);
+        prev2 = prev1;
+        prev1 = cur;
+    }
+
+    return prev1;
+}
+
+int rob(vector<int>& nums) {
+    // memset(dp,-1,sizeof(dp));
+    // return maxSumOfNonAdjElem(nums,nums.size(),0);
+
+    // return tabulation_maxSumOfNonAdjElem(nums);
+
+    return SpOpt_maxSumOfNonAdjElem(nums);
+}
+
+int main()
+{ 
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
+    vector<int> v {5,7,1,4};
+    cout<<rob(v);
+}

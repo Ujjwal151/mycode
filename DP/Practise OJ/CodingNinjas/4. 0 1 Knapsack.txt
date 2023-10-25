@@ -1,0 +1,113 @@
+//https://www.codingninjas.com/studio/problems/0-1-knapsack_920542
+//0 1 Knapsack
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+const int MOD = 1000000007;
+int dp[102][1003];//10^2, 10^3
+
+//Method 1: Recursion + memoization
+int f(vector<int>& w, vector<int>& v, int n, int M)
+{
+    if(n == 0) return 0;
+    if(M == 0) return 0;
+    if(dp[n][M] != 0) return dp[n][M];
+    int exclude = f(w,v,n-1,M), include = 0;
+    if(w[n-1] <= M) include = f(w,v,n-1,M-w[n-1]) + v[n-1];
+    return dp[n][M] = max(exclude,include);
+}
+
+//Method 2: Tabulation
+int fTab(vector<int>& w, vector<int>& v, int n, int M)
+{
+    int dp[n+1][M+1];
+    memset(dp, 0, sizeof(dp));
+    
+    for(int i = 1; i<=n; i++){
+        for(int j = 1; j<=M; j++){
+            int exclude = dp[i-1][j];
+            int include = 0;
+            if(w[i-1] <= j) include = dp[i-1][j - w[i-1]] + v[i-1];
+            dp[i][j] = max(exclude,include);
+        }
+    }
+    return dp[n][M];
+}
+
+//Method 3: Two 1D arrays
+int fTab1D(vector<int>& w, vector<int>& v, int n, int M)
+{
+    vector<int> prev(M+1), cur(M+1);
+    for(int i = 1; i<=n; i++){
+        // printv(prev);
+        for(int j = 1; j<=M; j++){
+            int exclude = prev[j];
+            int include = 0;
+            if(w[i-1] <= j) include = prev[j - w[i-1]] + v[i-1];
+            cur[j] = max(exclude,include);
+        }
+        prev = cur;
+    }
+    // printv(prev);
+    return prev[M];
+}
+
+//Method 4: One 1D array only
+int fTab1DSingleArray(vector<int>& w, vector<int>& v, int n, int M)
+{
+    vector<int> cur(M+1);
+    for(int i = 1; i<=n; i++){
+        // printv(cur);
+        //Update from last to first
+        for(int j = M; j>=0; j--){
+            int exclude = cur[j];
+            int include = 0;
+            if(w[i-1] <= j) include = cur[j - w[i-1]] + v[i-1];
+            cur[j] = max(exclude,include);
+        }
+    }
+    // printv(cur);
+    return cur[M];
+}
+
+//Method 5: (Method 4 Shortcode)
+int fTab1DSingleArrayShort(vector<int>& w, vector<int>& v, int n, int M)
+{
+    vector<int> cur(M+1);
+    for(int i = 0; i<n-1; i++){
+        for(int j = M; j>0; j--){
+            if(w[i] <= j) cur[j] = max(cur[j], cur[j - w[i]] + v[i]);
+        }
+    }
+    if(w[n-1] <= M) return max(cur[M], cur[M - w[n-1]] + v[n-1]);
+    else return cur[M];
+}
+
+int knapsack(vector<int> weight, vector<int> value, int n, int maxWeight) {
+    // memset(dp,0,sizeof(dp));
+    // return f(weight,value,n,maxWeight);
+    // return fTab(weight,value,n,maxWeight);
+    // return fTab1D(weight,value,n,maxWeight);
+    return fTab1DSingleArray(weight,value,n,maxWeight);
+    return fTab1DSingleArrayShort(weight,value,n,maxWeight);
+}
+
+int main()
+{ 
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
+
+    vector<int> weight = {3,4,5};
+    vector<int> value = {5,4,6};
+    int n = 3, maxWeight = 9;
+
+    // int n, maxWeight;
+    // cin >> n;
+    // vector<int> weight(n);
+    // vector<int> value(n);
+    // for(int i = 0; i<n; i++) cin >> weight[i];
+    // for(int i = 0; i<n; i++) cin >> value[i];
+    // cin >> maxWeight;
+
+    cout<<knapsack(weight, value, n, maxWeight);
+}

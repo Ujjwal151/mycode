@@ -1,0 +1,60 @@
+//https://leetcode.com/problems/coin-change
+//Coin Change
+#include <bits/stdc++.h>
+using namespace std;
+
+int minNoOfCoinRec(vector<int>& coins, int amount, vector<int>& dp)
+{
+    //Base Case
+    if(amount < 0) return INT_MAX;
+    if(amount == 0) return 0;
+
+    //dp direct retrun
+    if(dp[amount] != -1) return dp[amount];
+
+    //Iteration
+    int cnt = INT_MAX;
+    for(int coin : coins){
+        int x = minNoOfCoinRec(coins, amount - coin, dp);
+        if(x != INT_MAX) cnt = min(cnt, 1 + x);
+    }
+
+    //memoization & Return
+    return dp[amount] = cnt;
+}
+
+
+int minNoOfCoinIter(vector<int>& coins, int target_amount)
+{
+    vector<int> dp(target_amount+1, INT_MAX);
+    dp[0] = 0;
+
+    for(int amount = 1; amount <= target_amount; amount++){
+        
+        for(int coin : coins){
+            if(amount - coin >= 0 && dp[amount - coin] != INT_MAX){
+                dp[amount] = min(dp[amount], 1 + dp[amount - coin]);
+            }
+        }
+    }
+    return dp[target_amount];
+}
+
+int coinChange(vector<int>& coins, int amount) {
+    // vector<int> dp(amount+1, -1);
+    // int ans = minNoOfCoinRec(coins, amount, dp);
+    int ans = minNoOfCoinIter(coins, amount);
+    if(ans == INT_MAX) ans = -1;
+    return ans;
+}
+
+
+int main()
+{ 
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout); 
+    //                0  1  2  3
+    vector<int> coins{7, 4, 2, 9};
+    int amount = 19;
+    cout<< coinChange(coins, amount)<<"\n";
+}

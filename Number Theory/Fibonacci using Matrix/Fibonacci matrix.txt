@@ -1,0 +1,48 @@
+//
+#include<bits/stdc++.h>
+using namespace std;
+long long fiboMatrix(long long b){
+	vector < vector <long long> > ans {{1,0},{0,1}};
+	vector < vector <long long> > a {{1,1},{1,0}};
+
+	while(b){
+		if(b&1){
+			//ans *= a;
+			vector<vector<long long>> temp {{0,0},{0,0}};
+			for(int i = 0; i<2; i++){
+				for(int j = 0; j<2; j++){
+					temp[i][j] = 0;
+					for(int k = 0; k<2; k++){
+						temp[i][j] += ans[i][k] * a[k][j];
+					}
+				}
+			}
+			copy(temp.begin(), temp.end(), ans.begin());
+		}
+
+		//a *= a;
+		vector < vector <long long> > temp {{0,0},{0,0}};
+			for(int i = 0; i<2; i++){
+				for(int j = 0; j<2; j++){
+					temp[i][j] = 0;
+					for(int k = 0; k<2; k++){
+						temp[i][j] += a[i][k] * a[k][j];
+					}
+				}
+			}
+		copy(temp.begin(), temp.end(), a.begin());
+		b >>= 1;
+	}
+	return ans[0][0];
+}
+
+int main()
+{	
+	int n;
+	cin>>n;
+	for(int i = 81; i<=n; i++)
+	{
+		cout<<i<<": "<<fiboMatrix(i-1)<<"\n";
+	}
+
+}

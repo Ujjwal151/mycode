@@ -1,0 +1,84 @@
+//https://www.codingninjas.com/studio/problems/minimum-coins_2180776
+//(Ninja's Trip)
+//Minimum Cost for Tickets
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+void init()
+{
+    ios_base::sync_with_stdio(0), cin.tie(0); 
+    #ifndef ONLINE_JUDGE 
+    freopen("input.txt", "r", stdin); 
+    freopen("output.txt", "w", stdout); 
+    #endif
+    #define nl "\n"
+    #define o2(a, b) cout << a << " " << b << "\n";
+    #define out0(v) for(auto x: v) cout <<i<<" "; cout<<"\n";
+    #define outv(v) for(auto x: v) cout<< x <<" "; cout<<"\n";
+    #define inv(v) for(auto &x: v) cin >> x;
+}
+
+ll dp[366];
+ll fMem(int n, vector<int>& days, vector<int>& cost, int index)
+{
+    if(index >= n) return 0;
+    if(dp[index] != -1) return dp[index];
+
+    int i;
+    ll tk1 = (ll)cost[0] + fMem(n,days,cost,index+1);
+    
+    for(i = index; i<n && days[i] < days[index] + 7; i++);
+    ll tk7 = (ll)cost[1] +  fMem(n,days,cost,i);
+
+    for(i = index; i<n && days[i] < days[index] + 30; i++);
+    ll tk30 = (ll)cost[2] + fMem(n,days,cost,i);
+
+    return dp[index] = min(tk1, min(tk7, tk30));
+}
+
+ll fTab(int n, vector<int>& days, vector<int>& cost)
+{
+    int dpSize = days[n-1];
+    vector<ll> dp(dpSize + 1);
+
+    bool present[dpSize + 1] = {0};
+    for(int day = 0; day<n; day++) present[days[day]] = 1;
+
+    dp[0] = 0;
+    for(int i = 1; i<= dpSize; i++)
+    {
+        if(present[i] == false) {
+            dp[i] = dp[i-1];
+            continue;
+        } 
+
+        ll forday1, forday7, forday30;
+        forday1 = dp[i-1] + cost[0];
+        if(i-7 >= 0) forday7 = dp[i-7] + cost[1];
+        else  forday7 = cost[1];
+        if(i-30 >= 0) forday30 = dp[i-30] + cost[2];
+        else  forday30 = cost[2];
+
+        dp[i] = min(forday1, min(forday7, forday30));
+    }
+    return dp[dpSize];
+}
+
+int main()
+{init();
+    // int n = 12;
+    // vector<int> days {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 30, 31};
+    // vector<int> cost {2,7,15};
+
+    // int n = 6;
+    // vector<int> days {1, 4, 6, 7, 8, 20};
+    // vector<int> cost {2,7,15};
+    int n; cin >> n;
+    vector<int>days(n), cost(3);
+    for(int i = 0; i<n; i++) cin >> days[i];
+    for(int i = 0; i<3; i++) cin >> cost[i];
+    
+    // memset(dp,-1,sizeof(dp));
+    // cout<<f(n, days, cost, 0)<<nl;
+    cout<<fTab(n, days, cost)<<nl;
+}

@@ -1,0 +1,83 @@
+//BFS
+//Dijkstra
+#include <bits/stdc++.h>
+using namespace std;
+const int N = 1e5+10;
+#define ll long long
+
+vector<pair<int,int> > adj[N];
+vector<ll> dis(N,INT64_MAX);
+vector<bool> vis(N);
+
+void dijkstra(int src)
+{
+    set< pair<ll,int> > st;
+
+    dis[src] = 0;
+    st.insert({dis[src],src});
+
+    while(!st.empty())
+    {
+        auto it = st.begin();
+        int u = (*it).second;
+        //int cur_dis = (*it).first;
+        st.erase(it);
+	  if(vis[u] == 1) continue;
+	  vis[u] = 1;
+        //if(cur_dis > dis[u]) continue;
+
+        for(auto child : adj[u])
+        {
+            int v = child.first;
+            int wt = child.second;
+            if(dis[u] + wt < dis[v])
+            {
+                dis[v] = dis[u] + wt;
+                st.insert({dis[v], v});
+            }
+        }
+    }
+}
+
+int main() 
+{
+    freopen("input.txt", "r", stdin); freopen("output.txt", "w", stdout);
+    set<int> allNodes;
+    int n, m, x, y, wt;;
+    cin>>n>>m;
+    for (int i = 0; i < m; i++){
+        cin>>x>>y>>wt;
+        adj[x].push_back({y,wt});
+        adj[y].push_back({x,wt});
+
+        allNodes.insert(x);
+        allNodes.insert(y);
+    }
+
+    dijkstra(0);
+
+    for(auto node: allNodes)
+    {
+        cout<<node<<" "<<dis[node]<<"\n";
+    }
+}
+
+/*
+input
+5 6
+0 1 2 
+0 4 10 
+1 2 1 
+1 3 8 
+2 3 2 
+3 4 3 
+
+
+Output
+1 0
+2 2
+3 7
+4 7
+5 3
+6 6
+*/

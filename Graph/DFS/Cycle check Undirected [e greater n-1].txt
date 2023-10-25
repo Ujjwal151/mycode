@@ -1,0 +1,89 @@
+//Cycle check only for *Undirected* graph using DFS
+//Tree has exactly edges = nodes-1. More edges creates cycle.
+#include<bits/stdc++.h>
+using namespace std;
+
+const int N = 1e5;
+vector<int> adj[N];
+vector<bool> vis(N);
+
+pair<int,int> dfs(int u, int d){
+    vis[u] = 1;
+    // cout<<u<<"\n";
+    int c = 0;
+    for(auto v: adj[u])
+    {
+       ++d;
+       if(vis[v]) continue;
+       pair<int,int> cd = dfs(v,d);
+       c += cd.first;
+       d = cd.second;
+    }
+    // cout<<u<<" "<<d<<"\n";
+    return {1 + c, d};
+}
+
+bool check_cycle(int n){
+    for(int u = 1; u<=n; u++){
+        if(!vis[u]){
+            pair<int,int> P = dfs(u,0);
+            int edges = P.second, nodes = P.first;
+            //cout<<edges<<" "<<nodes<<"\n";
+
+            //Since double counts of eges in undirected graph
+            if(edges/2 > nodes - 1) 
+                return 1;
+        }
+    }
+    return 0;
+}
+
+int main() 
+{ 
+    freopen("input.txt", "r", stdin); 
+    freopen("output.txt", "w", stdout);
+    int n,e;
+    cin>>n>>e;
+
+    for(int i = 0; i<e; i++)
+    {
+        int u, v;
+        cin>>u>>v;
+        adj[u].push_back(v);
+        adj[v].push_back(u); // For undirected graph
+    }
+
+    cout<<(check_cycle(n)? "Cycle": "Tree");
+}
+
+/*
+Input
+7
+6
+1 4
+1 2
+2 3
+
+5 6
+5 7
+6 7
+
+Output
+cycle
+*/
+
+/*
+Input
+7
+6
+1 4
+1 2
+2 3
+
+5 6
+5 7
+5 3
+
+Output
+Tree
+*/

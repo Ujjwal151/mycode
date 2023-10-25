@@ -1,0 +1,83 @@
+//Cycle check only for *Dircted* graph
+//Cycle holds when recursive stack holds the v.
+#include<bits/stdc++.h>
+using namespace std;
+
+const int N = 1e5;
+vector<int> adj[N];
+vector<bool> vis(N);
+vector<bool> recs(N);
+
+bool dfs(int u){
+    vis[u] = recs[u] = true;
+    //cout<<u<<"\n"; print(recs);
+    for(auto v: adj[u]){
+        if(!vis[v]){
+            if(dfs(v)) return true;
+        }
+        else if(recs[v]){
+            //cout<<u<<" "<<v<<"\n"; print(recs);
+            return true;
+        }
+    }
+    //No need when recs is passed as an argument
+    recs[u] = false; //since recs is global
+    return false;
+}
+
+bool check_cycle(int n){
+    for(int u = 0; u<n; u++){ //nodes are from 0 to n-1
+        if(!vis[u]){
+            if(dfs(u)) return true;
+        }
+        //cout<<"\n";
+    }
+    return false;
+}
+
+int main() 
+{ 
+    freopen("input.txt", "r", stdin); 
+    freopen("output.txt", "w", stdout);
+    int n,e;
+    cin>>n>>e;
+
+    for(int i = 0; i<e; i++)
+    {
+        int u, v;
+        cin>>u>>v;
+        adj[u].push_back(v);
+        //adj[v].push_back(u); // For undirected graph
+    }
+    cout<<(check_cycle(n)? "Cycle": "No cycle");
+}
+
+/*
+Input
+7
+9
+
+0 1
+
+2 1
+2 3
+3 4
+4 5
+2 6
+6 5
+6 4
+4 2
+
+Output
+Cycle
+
+input
+3
+3
+1 2
+2 3
+1 3
+
+Output
+No cycle
+*/

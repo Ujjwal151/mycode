@@ -1,0 +1,94 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define ll long long
+
+bitset<10000010> bs; 
+vector<ll> primes;
+
+void sieve(long long n) {
+	bs.set();
+	bs[0] = bs[1] = 0;
+	for (long long i = 2; i <= n; i++){
+		if (bs[i]) 
+		{
+			primes.push_back((int)i);
+			for (long long j = i * i; j <= n; j += i) {
+				bs[j] = 0;
+			} 
+		}
+	}
+}
+
+bool isPrime(long long N) { 
+	if (N <= 10000010) return bs[N]; 
+	for (ll i = 0; i < (ll)primes.size(); i++){
+		if (N % primes[i] == 0) return false;
+	}
+	return true; 
+}
+
+
+vector<ll> primeFactors(long long N, map<ll,ll> &factorsPower) {
+	vector<ll> factors;
+	long long PF_idx = 0, PF = primes[PF_idx];
+	while (PF * PF <= N) { 
+		
+		while (N % PF == 0) { 
+			N /= PF; 
+			if(factorsPower[PF] == 0){
+				factors.push_back(PF);
+				factorsPower[PF]++;
+			}
+			else{
+				factorsPower[PF]++;
+			}
+		} 
+		PF = primes[++PF_idx];
+	}
+	
+	if (N != 1) {
+		factors.push_back(N); // special case if N is a prime
+		factorsPower[N]++;
+	}
+	return factors; // if N does not fit in 32-bit integer and is a prime
+}
+
+bool sortbysecdesc(const pair<int,int> &a,
+                   const pair<int,int> &b)
+{
+       return a.first>b.first;
+}
+
+int main()
+{
+    freopen("input.txt", "r", stdin); freopen("output.txt", "w", stdout);
+	sieve(1000000);
+
+	int t; cin>>t;
+	while(t--)
+	{
+		map<ll,ll> factorsPower;
+		ll n; cin>>n;
+		vector<ll> r = primeFactors(n, factorsPower); // slowest, 2147483647 is a prime
+		ll ans = 0;
+		vector< pair<int,int> > v;
+		for(ll i = 0; i<r.size(); i++)
+		{
+			v.push_back({factorsPower[r[i]],r[i]});
+		}
+		sort(v.begin(), v.end(), sortbysecdesc);
+
+		ll mul = 1;
+		for(ll i = 0; i<v.size(); i++)
+		{
+			mul *= v[i].second;
+			ll mx = 0;
+			for(ll j = i+1; j<v.size(); j++)
+			{
+				if(v[j].first>mx) mx = v[j].first;
+			}
+			ans += ((v[i].first-mx)*mul);
+		}
+		cout<<ans<<"\n";
+	}
+}

@@ -1,0 +1,27 @@
+void function()
+{
+    int n,m, source, destination;;
+    cin >> n >>m;
+    char mat[n][m];
+    for(int i = 0; i<n; i++){
+        for(int j = 0; j<m; j++){
+            char c; cin >> c;
+            mat[i][j] = c;
+            if(c != '#'){
+                int u = i*m + j;
+                if(i - 1 >= 0 && mat[i-1][j] != '#'){
+                    int v = u - m;
+                    adj[u].push_back(v);
+                    adj[v].push_back(u);
+                }
+                if(j - 1 >= 0 && mat[i][j-1] != '#'){
+                    int v = u - 1;
+                    adj[u].push_back(v);
+                    adj[v].push_back(u);
+                }
+                if(c == 'A') source = u;
+                else if(c == 'B') destination = u;
+            }
+        }
+    }
+}

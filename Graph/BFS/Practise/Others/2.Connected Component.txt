@@ -1,0 +1,73 @@
+//BFS Implementation Method
+#include<bits/stdc++.h>
+using namespace std;
+
+const int N = 10000;
+vector<int> g[N];
+vector<bool> vis(N);
+set<int> allNodes;
+
+void bfs(int src)
+{
+    queue<int> q;
+
+    q.push(src); vis[src] = 1;
+
+    while(!q.empty())
+    {
+        int node = q.front();
+        q.pop();
+        
+        //cout<<node<<"\n";
+        for(auto child : g[node])
+        {
+            if(vis[child]) continue;
+            q.push(child); vis[child] = 1;
+        }
+    }
+}
+
+int main() 
+{ 
+    freopen("input.txt", "r", stdin); freopen("output.txt", "w", stdout);
+    int n,e;
+    cin>>e;
+
+    for(int i = 0; i<e; i++)
+    {
+        int x, y;
+        cin>>x>>y;
+        allNodes.insert(x);
+        allNodes.insert(y);
+        g[x].push_back(y);
+        g[y].push_back(x);
+    }
+
+    int connected_component = 0;
+    for(auto it : allNodes)
+    {
+        if(vis[it]) continue; 
+        bfs(it);
+        connected_component++;
+    }
+
+    cout<<connected_component<<"\n";
+    
+}
+
+/*
+Input
+7
+
+2 4
+2 5
+
+3 6
+3 7
+3 8
+
+4 5
+5 9
+Output
+2
+*/

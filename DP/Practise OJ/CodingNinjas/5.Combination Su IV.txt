@@ -1,0 +1,57 @@
+//https://www.codingninjas.com/studio/problems/number-of-ways_3755252
+//Combination sum IV
+#include <bits/stdc++.h>
+using namespace std;
+void init(){ 
+    ios_base::sync_with_stdio(0), cin.tie(0); 
+    #ifndef ONLINE_JUDGE 
+    freopen("input.txt", "r", stdin); 
+    freopen("output.txt", "w", stdout); 
+    #endif
+    #define ll long long
+    #define nl "\n"
+    #define o2(a, b) cout << a << " " << b << "\n";
+    
+    #define outv(v) for(auto x: v) cout<< x <<" "; cout<<"\n";
+    #define inv(v) for(auto &x: v) cin >> x;
+}
+
+vector<int> dp(2002);
+int f(vector<int> &num, int n, int tar)
+{
+    if(tar == 0) return 1;
+    if(tar < 0) return 0;
+    if(dp[tar] != -1) return dp[tar];
+    int sum = 0;
+    for(int i = 0; i<n; i++){
+        sum += f(num,n,tar - num[i]);
+    }
+    return dp[tar] = sum;
+}
+
+int fTab(vector<int> &num, int n, int tar)
+{
+    // tar -> i, i -> j, f() -> dp[]
+    int dp[tar+1];
+    //Base Case
+    dp[0] = 1;
+    for(int i = 1; i<=tar; i++){
+        for(int j = 0; j<n; j++){
+            if(i >= num[j])
+                dp[i] += (dp[i - num[j]]);
+        }
+    }
+    return dp[tar];
+}
+
+int findWays(vector<int> &num, int tar){
+    fill(begin(dp),end(dp), -1);
+    return f(num,num.size(),tar);
+    // return fTab(num,num.size(),tar);
+}
+
+int main(){ init();
+    int n = 3, target = 5;
+    vector<int> num = {1,2,5};
+    cout<<findWays(num,target);
+}

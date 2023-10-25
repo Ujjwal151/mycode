@@ -1,0 +1,94 @@
+//Number of connected components using DSU only for Undirected Graph
+//Check connectivity : if cnt = 1 connected
+#include <bits/stdc++.h>
+using namespace std;
+
+const int N = 1e5;
+int parent[N];
+int size[N];
+
+void make(int a){
+    parent[a] = a;
+    size[a] = 1;
+}
+
+int find_parent(int a){
+    if(parent[a] == a) return a;
+    return parent[a] = find_parent(parent[a]);
+}
+
+void dsu(int u, int v){
+    int p1 = find_parent(u);
+    int p2 = find_parent(v);
+    if(p1 < p2) swap(p1,p2);
+    parent[p2] = p1;
+    size[p1] += size[p2];
+}
+
+int main() 
+{
+	freopen("input.txt", "r", stdin); 
+	freopen("output.txt", "w", stdout);
+
+	int n, e; cin>>n>>e;
+
+    for(int i = 1; i<=n; i++){ //Node from 1 to n
+        make(i);
+    }
+
+    while(e--){
+        int u,v; cin >> u >> v;
+        dsu(u,v);
+    }
+
+    int cnt = 0;
+    for(int i = 1; i<=n; i++){
+        if(parent[i] == i) ++cnt;
+    }
+
+    if(cnt == 1){
+        cout<<"Connected\n";
+        cout<<"No of con com = 1";
+    }
+    else{
+        cout<<"Disconnected!\n";
+        cout<<"No of con com = "<<cnt<<"\n";
+    }
+}
+
+/*
+input
+7 5
+
+1 2
+6 4
+4 5
+4 6
+7 3
+
+Output
+Disconnected!
+No of con com = 3
+*/
+
+/*
+Input
+8
+8
+1 2
+
+2 4
+2 5
+
+3 6
+3 7
+3 8
+
+4 5
+
+5 3
+
+Output
+Connected
+No of con com = 1
+*/

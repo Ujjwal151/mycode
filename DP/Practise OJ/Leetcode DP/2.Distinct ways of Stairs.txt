@@ -1,0 +1,49 @@
+//Number of distinct way to climb on stairs by either 1 or 2 steps.
+//70. Climbing Stairs
+//https://leetcode.com/problems/climbing-stairs/
+#include <bits/stdc++.h>
+using namespace std;
+const int N = 10000007;
+vector<int> dp(N,-1);
+// 0 1 2 3 4 5  6  7  8  9  10
+// 1 1 2 3 5 8 13 21 34 55  89
+int stairRec(int n){
+    //base case
+    if(n == 1 || n == 0) return 1;
+    //dp direct retrun
+    if(dp[n] != -1) return dp[n];
+    //memoization
+    return dp[n] = stairRec(n-1) + stairRec(n-2);
+}
+
+int stairIter(int n){
+    //base case initialization
+    dp[0] = 1, dp[1] = 1;
+    //Iteration
+    for(int i = 2; i<=N; i++){
+        dp[i] = dp[i-1] + dp[i-2];
+    }
+    //Return
+    return dp[n];
+}
+
+int stairSpOpt(int n){
+    int prev2 = 1, prev1 = 1;
+    if(n == 1 || n == 0) return 1;
+    for(int i = 2; i<=n; i++){
+        int cur = prev1 + prev2;
+        prev2 = prev1;
+        prev1 = cur;
+    }
+    return prev1;
+}
+
+int main()
+{ 
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout); 
+    int n = 4;
+    cout<<stairRec(n)<<"\n";
+    cout<<stairIter(n)<<"\n";
+    cout<<stairSpOpt(n)<<"\n";
+}

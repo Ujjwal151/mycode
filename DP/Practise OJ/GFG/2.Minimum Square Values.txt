@@ -1,0 +1,47 @@
+//Minimum Square Values
+#include <bits/stdc++.h>
+using namespace std;
+void init(){ 
+    ios_base::sync_with_stdio(0), cin.tie(0); 
+    #ifndef ONLINE_JUDGE 
+    freopen("input.txt", "r", stdin); 
+    freopen("output.txt", "w", stdout); 
+    #endif
+    #define ll long long
+    #define nl "\n"
+    #define o2(a, b) cout << a << " " << b << "\n";
+    
+    #define outv(v) for(auto x: v) cout<< x <<" "; cout<<"\n";
+    #define inv(v) for(auto &x: v) cin >> x;
+}
+
+vector< vector<int> > DP(10001);
+vector<int> fMem(int n)
+{
+    if(n == 0) return {};
+    if(DP[n].size() > 0) return DP[n]; 
+    vector<int> cnt(10001);
+    for(int i = sqrt(n); i>=1; i--){
+        vector<int> val = fMem(n - i*i);
+        val.push_back(i);
+        if(val.size() < cnt.size()){
+            cnt.resize(val.size());
+            cnt = val;
+        }
+    }
+    return DP[n] = cnt;
+}
+
+void MinSquaresValues(int n)
+{
+    fill(begin(DP),end(DP),vector<int>());
+    outv(fMem(n));
+}
+
+int main(){ init();
+    freopen("input.txt", "r", stdin); 
+    freopen("output.txt", "w", stdout); 
+    int n = 94;
+    cout<<n<<"\n";
+    MinSquaresValues(n);
+}

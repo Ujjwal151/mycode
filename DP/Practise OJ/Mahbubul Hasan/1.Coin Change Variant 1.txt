@@ -1,0 +1,25 @@
+//Programming Contest |Data Structure and Algorithm | 
+//Book Page 162
+#include<bits/stdc++.h>
+using namespace std;
+int main() 
+{ 
+    freopen("input.txt", "r", stdin); freopen("output.txt", "w", stdout);
+    int n;
+    //cin>>n;
+    n = 15;
+    vector<int> coin = {4,7,10};
+    
+    vector<int> possible(n+1);
+    possible[0] = 1;
+    for(int i = 1; i<=n; i++)
+    {
+        for(int j = 0; j<coin.size(); j++)
+        {
+            if(i>=coin[j])
+            possible[i] = possible[i] | possible[i-coin[j]];
+        }
+        cout<<i<<" "<<possible[i]<<"\n";
+    }
+    cout<<possible[n];
+}

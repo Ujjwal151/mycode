@@ -1,0 +1,45 @@
+//Problem I.Creating Triangles
+//ICPC -2022 Green University Onsite Contest
+#include <bits/stdc++.h>
+using namespace std;
+
+using ll = long long;
+unordered_map<ll,ll> mp;
+ll p[55];
+
+ll f(ll n)
+{
+    if(mp[n] != 0) return mp[n];
+    if(n < 5){
+        if(n == 3) return mp[n] = 2;
+        else return mp[n] = n;
+    }
+    else{
+        ll e = log2(n);
+        ll power =  p[e];
+        if(n == power) return n;
+        return mp[n] = 2 * f(n - power);
+    }   
+}
+
+int main()
+{ 
+    // freopen("input.txt", "r", stdin); 
+    // freopen("output.txt", "w", stdout); 
+    p[0] = 1;
+    for(int i = 1; i<55; i++){
+        p[i] = p[i-1]*2;
+    }
+    int t= 1; cin >> t;
+    for(int i = 1; i<=t; i++){
+        printf("Case %d: ",i);
+        ll K, N = 3;
+        cin >> K >> N;
+        ll max_value = 4 * p[N];
+        if(K > max_value) cout<<-1<<"\n";
+        else if((K & (K-1)) == 0){
+            cout<<K<<"\n";
+        } 
+        else cout<<f(K)<<"\n";
+    }
+}

@@ -1,0 +1,68 @@
+//BFS 
+//GFG : Steps by Knight
+//https://practice.geeksforgeeks.org/problems/steps-by-knight5927/1?page=1&category[]=BFS&sortBy=submissions
+
+#include<bits/stdc++.h>
+using namespace std;
+
+vector<pair<int,int>> moves = {
+	{-2,-1},{-2,1},{-1,-2},{-1,2},{1,-2},{1,2},{2,-1},{2,1}
+};
+bool isValid(int x,int y, int N){
+	return x >= 1 && y >= 1 && x <= N && y<= N;
+}
+
+int minStepToReachTarget(vector<int>&KnightPos, vector<int>&TargetPos, int N)
+{
+	int level[N+1][N+1];
+	for(int i = 1; i<=N; i++){
+		for(int j = 1; j<=N; j++){
+			level[i][j] = -1;
+		}
+	}
+
+	queue<pair<int,int>>q;
+	q.push({KnightPos[0],KnightPos[1]});
+	level[KnightPos[0]][KnightPos[1]] = 0;
+
+	while(!q.empty())
+	{
+		pair<int,int> node = q.front();
+		q.pop();
+
+		for(auto move : moves)
+		{
+			int childx = move.first + node.first;
+			int childy = move.second + node.second;
+
+			if(isValid(childx,childy,N)){
+				if(level[childx][childy] == -1){
+					q.push({childx,childy});
+					level[childx][childy] = level[node.first][node.second]+1;
+				}
+			}
+			if(level[TargetPos[0]][TargetPos[1]] != -1)
+			{
+				return level[TargetPos[0]][TargetPos[1]];
+			}
+
+		}
+	}
+}
+
+int main(){
+	freopen("input.txt", "r", stdin); freopen("output.txt", "w", stdout);
+
+	int t; cin>>t;
+	while(t--)
+	{
+		vector<int> KnightPos(2);
+		vector<int> TargetPos(2);
+		int N; cin>>N;
+		cin>>KnightPos[0]>>KnightPos[1];
+		cin>>TargetPos[0]>>TargetPos[1];
+
+		cout<< minStepToReachTarget(KnightPos,TargetPos,N) <<"\n";
+	}
+	return 0;
+}

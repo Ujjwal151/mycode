@@ -1,0 +1,96 @@
+//BFS | Distance and Shortedst Path from 4 to 6. 
+#include<bits/stdc++.h>
+using namespace std;
+const int N = 10000;
+vector<int> g[N];
+vector<bool> vis(N);
+vector<int> level(N);
+vector<int> parent(N);
+
+void input(int e)
+{
+    for(int i = 0; i<e; i++)
+    {
+        int x, y;
+        cin>>x>>y;
+        g[x].push_back(y);
+        g[y].push_back(x);
+    }
+}
+
+void bfs(int src, int des)
+{
+    queue<int> q;
+    q.push(src); vis[src] = 1;
+
+    parent[src] = src;
+
+    while(!q.empty())
+    {
+        int node = q.front();
+        q.pop();
+        
+        for(int i = 0; i<g[node].size(); i++)
+        {
+            int child = g[node][i];
+            if(vis[child]) continue;
+            q.push(child); vis[child] = 1; 
+            parent[child] = node; // Save parent of child to node.
+            level[child] = level[node]+1;
+            if(child == des) return; // We reached our destination
+        }
+    }
+}
+
+void Print_Path(int src,int des)
+{
+    cout<<"Path: ";
+    stack<int> st;
+    while(des != src)
+    {
+        st.push(des);
+        des = parent[des];
+    }
+    st.push(src);
+   
+    while(st.size()>1)
+    {
+        cout<<st.top()<<"-> ";
+        st.pop();
+    }
+    cout<<st.top()<<"\n";
+}
+
+int main() 
+{ 
+    freopen("input.txt", "r", stdin); freopen("output.txt", "w", stdout);
+    int n = 9, e = 10;
+    int src = 4, des = 6;
+    input(e);
+    bfs(src,des);
+    cout<<"Distance = "<<level[des]<<"\n";
+    Print_Path(src,des);
+}
+
+/*
+Input
+1 2
+1 3
+
+2 4
+2 5
+
+3 6
+3 7
+3 8
+
+4 5
+
+5 9
+6 9
+
+Output
+Distance = 3
+Path: 4-> 5-> 9-> 6
+
+*/

@@ -1,0 +1,61 @@
+//Weighted undirected edge list Representation
+#include<bits/stdc++.h>
+using namespace std;
+#define o3(a,b,c) cout<<a<<" "<<b<<" "<<c<<"\n";
+
+const int N = 1e4;
+vector<tuple<int,int,int> > edges;
+
+int main()
+{   
+    freopen("input.txt", "r", stdin); 
+    freopen("output.txt", "w", stdout);
+    
+    int n,e;
+    cin>>n>>e;
+
+    for(int i = 0; i<e; i++)
+    {
+        int u,v,w;
+        cin>>u>>v>>w;
+        edges.push_back(make_tuple(u,v,w));
+    }
+
+    for(auto edge : edges)
+    {
+        int u,v,w;
+        tie(u,v,w) = edge;
+        o3(u,v,w);
+    }
+}
+
+/*
+Input
+9
+10
+1 2 1
+1 3 2
+
+2 4 3
+2 5 1
+
+3 6 4
+3 7 5
+3 8 4
+
+4 5 4
+5 9 2
+6 9 1
+
+Output
+1 2 1
+1 3 2
+2 4 3
+2 5 1
+3 6 4
+3 7 5
+3 8 4
+4 5 4
+5 9 2
+6 9 1
+*/

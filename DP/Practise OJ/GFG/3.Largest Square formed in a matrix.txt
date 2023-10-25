@@ -1,0 +1,51 @@
+//https://practice.geeksforgeeks.org/problems/largest-square-formed-in-a-matrix0806/1
+//Largest square formed in a matrix
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+void init(){ 
+    ios_base::sync_with_stdio(0), cin.tie(0); 
+    #ifndef ONLINE_JUDGE 
+    freopen("input.txt", "r", stdin); 
+    freopen("output.txt", "w", stdout); 
+    #endif
+    #define nl "\n"
+    #define o2(a, b) cout << a << " " << b << "\n";
+    
+    #define inVec(v) for(auto &x: v) cin >> x;
+    #define outVec(v) for(auto &x: v) cout<< x <<" "; cout<<"\n";
+    #define in2dVec(v) for(int i = 0; i<v.size(); i++){ for(int j = 0; j < v[0].size(); j++){ cin >> v[i][j];}}
+    #define out2dVec(v){for(auto &x : v){ for(auto &y: x){ cout<<y<<" ";} cout<<"\n";}}
+}
+
+int fTab(vector<vector<int> >& mat){
+    int n = mat.size(), m = mat[0].size();
+    vector<vector<int> > dp(n+1,vector<int>(m+1,0));
+    int maxi = 0;
+    for(int i = n-1; i>=0; i--){
+        for(int j = m-1; j>=0; j--){
+            if(mat[i][j] == 0) continue;
+            dp[i][j] = 1 + min(dp[i+1][j+1], min(dp[i+1][j],dp[i][j+1]));
+            maxi = max(maxi, dp[i][j]);
+        }
+    }
+    return maxi;
+}
+
+int main()
+{init();
+
+    int x = 200, y = 300;
+    int n, m; cin >> n >> m;
+    vector<vector<int> > mat(n,vector<int>(m,0));
+    in2dVec(mat);
+    // int n = 5, m = 5;
+    // vector<vector<int> > mat = {
+    //     {1, 1, 0, 1, 0},
+    //     {1, 0, 1, 1, 0},
+    //     {1, 1, 1, 1, 1},
+    //     {1, 0, 1, 1, 1},
+    //     {0, 1, 1, 1, 1}
+    // };
+    cout<<fTab(mat);
+}

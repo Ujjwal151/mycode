@@ -1,0 +1,20 @@
+ll binExpMod(ll a, ll b, ll M)
+{
+    if(b==0) return 1 % M;
+    ll x = binExpMod(a,b/2,M);
+    x = (x*x)%M;
+    if(b&1) x = (x*a)%M;
+    return x;
+}
+
+ll binExp(ll a,ll b)
+{
+	ll ans = 1;
+	while(b)
+    	{
+		if(b&1) ans *= a;
+		a *= a;
+		b >>= 1;
+	}
+	return ans;
+}

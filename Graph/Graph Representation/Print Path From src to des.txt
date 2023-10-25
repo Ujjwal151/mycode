@@ -1,0 +1,14 @@
+void print_path(int src, int des, int m, vector<int> &parent){
+    map<int,char> mp = {{m,'U'},{-m,'D'},{1,'L'},{-1,'R'}};
+    vector<int> path;
+    while(parent[des] != -1){   
+        src = parent[des];
+        int d = src - des;
+        path.push_back(d);
+        //cout<<des<<" "<<src<<" "<<d<<"\n";
+        des = src;
+    }
+    for(int i = path.size()-1; i >= 0; i--){
+        cout<<mp[path[i]];
+    }
+}

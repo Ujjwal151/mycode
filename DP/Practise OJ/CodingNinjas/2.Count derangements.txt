@@ -1,0 +1,55 @@
+//https://www.codingninjas.com/studio/problems/count-derangements_873861?topList=top-dynamic-programming-questions
+//Count derangements
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+const int MOD = 1000000007;
+int dp[100005];//1e5+5
+int solve(int n)
+{
+    if(n == 1) return 0;
+    if(n == 2) return 1;
+    if(dp[n] != -1) return dp[n];
+    //f(n) = (n-1)*(f(n-1) + f(n-2))
+    int add = (0LL + solve(n-1) + solve(n-2)) % MOD;
+    return dp[n] = (1LL* (n-1) * add ) % MOD;
+}
+
+int solveTab(int n)
+{
+    vector<long long> dp(n+1);
+    dp[1] = 0, dp[2] = 1;
+
+    for(int i = 3; i<=n; i++){
+        dp[i] = ((i-1) * ((dp[i-1] + dp[i-2]) % MOD) )%MOD;
+    }
+    return dp[n];
+}
+
+int solveOpt(int n)
+{
+    long long prev2 = 0, prev1 = 1;
+
+    for(int i = 3; i<=n; i++){
+        int cur = ((i-1) * ((prev1 + prev2) % MOD) )%MOD;
+        prev2 = prev1;
+        prev1 = cur;
+    }
+    return prev1;
+}
+
+long long int countDerangements(int n) {
+    // memset(dp,-1,sizeof(dp));
+    // return solve(n);
+    // return solveTab(n);
+    return solveOpt(n);
+}
+
+int main()
+{ 
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
+    int N = 5;
+    // cin >> N;
+    cout<<countDerangements(N);
+}

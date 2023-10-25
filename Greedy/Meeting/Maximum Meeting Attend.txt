@@ -1,0 +1,71 @@
+//Attending Meeting
+//Attend Max number of unoverlapped meeting
+#include<bits/stdc++.h>
+using namespace std;
+
+struct meeting{
+    double start, end;
+    meeting(double _start,double _end){
+        start = _start;
+        end = _end;
+    }
+};
+
+bool cmp(meeting &a, meeting &b){
+    return a.end <= b.end;
+}
+
+int main() { 
+    ios_base::sync_with_stdio(false), cin.tie(NULL);
+    #ifndef ONLINE_JUDGE
+    freopen("input.txt", "r", stdin); 
+    freopen("output.txt", "w", stdout);
+    #endif
+
+    int n; cin>> n;
+    vector<meeting> v;
+    for(int i = 0; i<n; i++){
+        string s1 , s2, str;
+        cin >> s1 >> s2;
+
+        vector<double> ST, EN;
+        stringstream ss(s1);
+        while(getline(ss,str,':'))
+            ST.push_back(stoi(str));
+
+        stringstream sss(s2);
+        while(getline(sss,str,':'))
+            EN.push_back(stoi(str));
+
+        double starting_time = ST[0]*60 + ST[1];
+        double ending_time = EN[0]*60 + EN[1];
+        //cin>> starting_time >> ending_time;
+        v.push_back(meeting(starting_time,ending_time));
+    }
+    sort(begin(v), end(v), cmp);
+
+    int cnt = 0;
+    double ending = 0;
+    for(int i = 0; i<n; i++)
+    {
+        cout<<ending<<" "<<v[i].start<<"\n";
+        if(ending <= v[i].start)
+        {
+            ++cnt;
+            ending = v[i].end;
+        }
+    }
+    cout<<cnt<<"\n";
+}
+
+/*
+Input
+4
+10:00 12:00
+11:00 13:10
+12:50 14:20
+13:50 14:50
+
+Output
+2
+*/

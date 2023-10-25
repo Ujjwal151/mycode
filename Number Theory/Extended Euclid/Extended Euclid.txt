@@ -1,0 +1,22 @@
+#include<iostream>
+#include<math.h>
+using namespace std;
+
+pair<int,int> gcd(int a, int b) {
+    int q,r,s1,s2,s,t1,t2,t;
+    s1=1, s2=0, t1=0, t2= 1;
+    while(b){
+    	q = a/b;
+    	r = a%b;
+    	s = s1 - q*s2;
+  	t = t1 - q*t2;
+  	a = b, b = r;
+  	s1=s2, s2=s,t1=t2,t2=t;
+    }
+    return {s1,t1};
+}
+
+int main() { ios_base::sync_with_stdio(false); cin.tie(0);
+    auto p = gcd(25,15);
+    cout<<p.first<<"\n"<<p.second;
+}

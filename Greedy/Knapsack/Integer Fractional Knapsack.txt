@@ -1,0 +1,57 @@
+//Fractional Knapsack
+//Obviously integer Fraction (Less than 1 kg not allowed)
+#include<bits/stdc++.h>
+using namespace std;
+
+struct item{
+    int price, weight;
+    item(int _price,int _weight){
+        price = _price;
+        weight = _weight;
+    }
+};
+
+bool cmp(item &a, item &b){
+    return (double)a.price/a.weight >= (double)b.price/b.weight;
+}
+
+int main() { 
+    ios_base::sync_with_stdio(false), cin.tie(NULL);
+    #ifndef ONLINE_JUDGE
+    freopen("input.txt", "r", stdin); 
+    freopen("output.txt", "w", stdout);
+    #endif
+
+    int n = 3, m = 20;
+    int p[]=  {4000,1200,3000};
+    int w[] = {50, 6, 10};
+
+    vector<item> v;
+    for(int i = 0; i<n; i++){
+        v.push_back(item(p[i],w[i]));
+    }
+    sort(begin(v), end(v),cmp);
+
+    double profit = 0;
+    for(int i = 0; i<n; i++){
+        if(v[i].weight <= m){
+            profit += v[i].price;
+            m -= v[i].weight;
+        }
+        else{
+            profit += m*(double)v[i].price/v[i].weight;
+            break;
+        }
+    }
+
+    //Or,
+    // for(int i = 0; i<n; i++){
+    //     int min_wt = min(m, v[i].weight);
+    //     if(!min_wt) break;
+    //     profit += min_wt*((double)v[i].price/v[i].weight);
+    //     // cout<<m<<" "<<min_wt<<" "<<profit<<"\n";
+    //     m -= min_wt;
+    // }
+    
+    cout<<profit;
+}

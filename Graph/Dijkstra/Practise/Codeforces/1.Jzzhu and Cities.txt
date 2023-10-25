@@ -1,0 +1,89 @@
+//CF449B. Jzzhu and Cities
+//https://codeforces.com/contest/449/problem/B
+//Topic : BFS, Dijkstra,
+#include<bits/stdc++.h>
+using namespace std;
+#define LL long long
+const LL INF = INT64_MAX;
+const int N = 200005;//2e5+5
+
+struct str{
+	int v, wt; bool type;
+	str(int _v, int _wt, bool _type){
+		v = _v, wt = _wt, type = _type;
+	}
+};
+
+vector< str > adj[N];
+vector<LL> dis(N,INF);
+vector<bool> vis(N);
+vector<bool> train(N);
+
+void diskstra(int src)
+{
+    set<pair<LL,int> > st;
+    dis[src] = 0;
+    st.insert({dis[src], src});
+
+    while(!st.empty())
+    {
+        auto it = st.begin();
+        int u = (*it).second;
+        st.erase(it);
+
+        if(vis[u] == 1) continue;
+        vis[u] = 1;
+
+        for(auto node : adj[u])
+        {
+            int v = node.v;
+            int wt = node.wt;
+            bool type = node.type;
+
+            if(dis[u] + wt < dis[v]){
+                dis[v] = dis[u] + wt;
+                train[v] = type;
+				st.insert({dis[v],v});
+            }
+			else if(dis[u] + wt == dis[v] && train[v] == 1 && type == 0){
+				train[v] = 0;
+			}
+                
+        }
+    }
+}
+
+int main()
+{
+    freopen("input.txt", "r", stdin); freopen("output.txt", "w", stdout);
+    int n,m,k,u,v,x,s,y; cin>>n>>m>>k;
+    while(m--){
+        cin>>u>>v>>x;
+        adj[u].push_back(str(v,x,0));
+        adj[v].push_back(str(u,x,0));
+    }
+    for(int i = 0; i<k; i++){
+        cin>>s>>y;
+        adj[1].push_back(str(s,y,1));
+    }
+
+    diskstra(1);
+    int train_need = accumulate(begin(train), end(train), 0);
+    cout<<k - train_need<<"\n";
+}
+
+/*
+Input
+5 5 3
+1 2 1
+2 3 2
+1 3 3
+3 4 4
+1 5 5
+3 5
+4 5
+5 5
+
+Output
+2
+*/

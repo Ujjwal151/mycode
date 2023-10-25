@@ -1,0 +1,42 @@
+//https://practice.geeksforgeeks.org/problems/get-minimum-squares0538/1
+//Minimum number of Squares are there in N.
+#include <bits/stdc++.h>
+using namespace std;
+void init(){ 
+    ios_base::sync_with_stdio(0), cin.tie(0); 
+    #ifndef ONLINE_JUDGE 
+    freopen("input.txt", "r", stdin); 
+    freopen("output.txt", "w", stdout); 
+    #endif
+    #define ll long long
+    #define nl "\n"
+    #define o2(a, b) cout << a << " " << b << "\n";
+    
+    #define outv(v) for(auto x: v) cout<< x <<" "; cout<<"\n";
+    #define inv(v) for(auto &x: v) cin >> x;
+}
+
+int dp[10001];
+int fMem(int n)
+{
+    if(n < 4) return n;
+    if(dp[n]) return dp[n]; 
+    int cnt = INT_MAX;
+    for(int i = sqrt(n); i>=1; i--){
+        cnt = min(cnt, 1 + fMem(n - i*i));
+    }
+    return dp[n] = cnt;
+}
+
+int MinSquares(int n)
+{
+    memset(dp,0,sizeof(dp));
+    return fMem(n);
+}
+
+int main(){ init();
+    freopen("input.txt", "r", stdin); 
+    freopen("output.txt", "w", stdout); 
+    int n = 94;
+    cout<<MinSquares(n);
+}

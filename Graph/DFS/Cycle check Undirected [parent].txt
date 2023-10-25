@@ -1,0 +1,125 @@
+//Cycle check only for *Undirected* graph using DFS
+//Cycle holds vis[v] && v!= parent
+#include<bits/stdc++.h>
+using namespace std;
+
+const int N = 1e5 + 10;
+vector< vector<int> > adj(N);
+vector<bool> vis(N);
+
+bool dfs(int u, int parent){
+    vis[u] = 1;
+    cout<<u<<"\n";
+    for(auto v: adj[u]){
+        if(!vis[v]){
+            if(dfs(v,u)) return true;
+        }
+        else if(v != parent){
+            // cout<<u<<" "<<v<<"\n";
+            return true;
+        }
+    }
+    return false;
+}
+
+bool check_cycle(int n){
+    for(int u = 1; u<=n; u++){ //1 to n
+        if(!vis[u]){
+            if(dfs(u,-1)) return true;
+        }
+    }
+    return false;
+}
+
+int main() 
+{ 
+    ios_base::sync_with_stdio(false), cin.tie(NULL);
+    #ifndef ONLINE_JUDGE
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
+    #endif
+    
+    int n,m;
+    cin>>n>>m;
+
+    for(int i = 0; i<m; i++)
+    {
+        int u,v; cin>>u>>v;
+        adj[u].push_back(v);
+        adj[v].push_back(u); // For undirected graph
+    }
+    cout<<(check_cycle(n)? "Cycle": "Tree");
+}
+
+/*
+Input
+10
+8
+
+1 2
+2 3
+
+4 5
+4 6
+6 7
+7 8
+8 9
+9 10
+
+Output
+Tree
+*/
+
+/*
+Input
+10
+9
+
+1 2
+2 3
+
+4 5
+4 6
+6 7
+6 8
+7 8
+8 9
+9 10
+
+output
+Cycle
+*/
+
+
+
+/*
+Input
+7
+6
+1 4
+1 2
+2 3
+
+5 6
+5 7
+6 7
+
+Output
+cycle
+*/
+
+/*
+Input
+7
+6
+1 4
+1 2
+2 3
+
+5 6
+5 7
+5 3
+
+Output
+Tree
+*/
